@@ -12,20 +12,21 @@ class Ui(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(800, 600)
-        Form.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0  rgb(26, 26, 26), stop:1 rgb(23, 23, 23));")
+        Form.setStyleSheet(
+            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0  rgb(26, 26, 26), stop:1 rgb(23, 23, 23));")
         self.widget = QtWidgets.QWidget(Form)
         self.widget.setGeometry(QtCore.QRect(0, 0, 791, 591))
         self.widget.setStyleSheet("QPushButton {\n"
-"    font: 75 12pt \"JetBrainsMonoNL Nerd Font\";\n"
-"    border-radius: 10px;\n"
-"    border-color: rgb(0, 0, 0);\n"
-"    background-color: rgb(68, 68, 68);\n"
-"    color: rgb(255, 255, 255);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(33, 39, 45);\n"
-"}")
+                                  "    font: 75 12pt \"JetBrainsMonoNL Nerd Font\";\n"
+                                  "    border-radius: 10px;\n"
+                                  "    border-color: rgb(0, 0, 0);\n"
+                                  "    background-color: rgb(68, 68, 68);\n"
+                                  "    color: rgb(255, 255, 255);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:hover {\n"
+                                  "    background-color: rgb(33, 39, 45);\n"
+                                  "}")
         self.widget.setObjectName("widget")
         self.label = QtWidgets.QLabel(self.widget)
         self.label.setGeometry(QtCore.QRect(10, 0, 781, 591))
@@ -36,13 +37,13 @@ class Ui(object):
         self.label.setSizePolicy(sizePolicy)
         self.label.setMaximumSize(QtCore.QSize(800, 600))
         self.label.setStyleSheet("border-image: url(:/images/images/background.jpg);\n"
-"border-radius: 20px;")
+                                 "border-radius: 20px;")
         self.label.setText("")
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.widget)
         self.label_2.setGeometry(QtCore.QRect(280, 30, 261, 51))
         self.label_2.setStyleSheet("color: rgb(255, 255, 255);\n"
-"font: 75 36pt \"JetBrainsMonoNL Nerd Font\";")
+                                   "font: 75 36pt \"JetBrainsMonoNL Nerd Font\";")
         self.label_2.setObjectName("label_2")
         self.Start = QtWidgets.QPushButton(self.widget)
         self.Start.setGeometry(QtCore.QRect(540, 510, 171, 51))
@@ -52,9 +53,9 @@ class Ui(object):
         self.Output = QtWidgets.QLabel(self.widget)
         self.Output.setGeometry(QtCore.QRect(90, 90, 621, 411))
         self.Output.setStyleSheet("background-color: rgba(0, 0, 0, 100);\n"
-"border-radius: 10px;\n"
-"font: 75 8pt \"JetBrainsMonoNL Nerd Font\";\n"
-"color: rgb(255, 255, 255);")
+                                  "border-radius: 10px;\n"
+                                  "font: 75 8pt \"JetBrainsMonoNL Nerd Font\";\n"
+                                  "color: rgb(255, 255, 255);")
         self.Output.setText("")
         self.Output.setObjectName("Output")
         self.Path = QtWidgets.QPushButton(self.widget)
@@ -101,7 +102,6 @@ class Ui(object):
             data = file.read()
             pattern = r'(path_to_file\s*=\s*)([\'"]?)(.*?)\2'
 
-            # Замена с сохранением оригинального формата кавычек
             updated_data = re.sub(
                 pattern,
                 lambda
@@ -112,8 +112,6 @@ class Ui(object):
         with open("resources/config.toml", "w", encoding="utf-8") as file:
             file.write(updated_data)
 
-
-
-
     def on_Conf_clicked(self, Form):
-        ...
+        project_root = os.getcwd()
+        os.startfile(f"{project_root}/resources/config.toml")
