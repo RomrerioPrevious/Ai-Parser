@@ -4,6 +4,7 @@ import re
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 
+from .. import FileHandler
 from ..config import CONFIG
 from .res_rc import *
 
@@ -86,7 +87,8 @@ class Ui(object):
         self.Conf.clicked.connect(lambda: self.on_Conf_clicked(Form))
 
     def on_Start_clicked(self, Form):
-        ...
+        handler = FileHandler()
+        handler.start_parse()
 
     def on_Path_clicked(self, Form):
         file_path, _ = QFileDialog.getOpenFileName(
