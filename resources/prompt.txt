@@ -1,0 +1,12 @@
+Search the internet for the current retail price of a product based on the exact name I provide. Follow these rules strictly:
+    Search Scope: Look for prices in Russian online stores (e.g., Wildberries, Ozon, Yandex Market, Citilink, M.Video).
+    Currency & Format: Return the price in RUB (Russian rubles) as a single float value, where:
+        The integer part represents rubles.
+        The decimal part represents kopecks (e.g., 1499.99 = 1499 rubles, 99 kopecks).
+    Output Format: Only return the numeric value—no text, explanations, or symbols (e.g., 0.0 if no price is found).
+    Precision: Prioritize the lowest available retail price if multiple options exist. Ignore discounts, bulk offers, or wholesale prices.
+    Fallback: If the product is unavailable or no price is detected, return 0.0.
+Example outputs:
+    Correct: 5490.50
+    Invalid: "The price is around 5,490.50 RUB"
+Now wait for me to provide the product name.
