@@ -8,5 +8,6 @@ CONFIG = Dynaconf(
 logging.basicConfig(
     level=logging.INFO, filename="resources/logs.log", filemode="a",
     datefmt='%Y-%m-%d %H:%M:%S',
-    format="%(asctime)s %(levelname)s | %(message)s"
+    format="%(asctime)s %(levelname)s | %(message)s",
+    encoding="utf-8"
 )

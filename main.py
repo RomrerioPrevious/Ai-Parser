@@ -14,4 +14,5 @@ def main():
 
 if __name__ == "__main__":
     ic.enable()
+    logging.info("Program has been started")
     main()
