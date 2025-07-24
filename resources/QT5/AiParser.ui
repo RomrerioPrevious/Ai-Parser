@@ -144,9 +144,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="Conf">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>310</x>
       <y>510</y>
-      <width>171</width>
+      <width>181</width>
       <height>51</height>
      </rect>
     </property>
@@ -163,7 +163,7 @@ color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <resources>
-  <include location="D:/Save/AiParser/resources/QT5/res.qrc"/>
+  <include location="res.qrc"/>
  </resources>
  <connections/>
 </ui>
