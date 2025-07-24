@@ -8,6 +8,5 @@ dependencies = [
     "icecream>=2.1.5",
     "openai>=1.97.1",
     "pandas>=2.3.1",
-    "pyqt5",
     "requests>=2.32.4",
 ]
