@@ -1,4 +1,10 @@
+import os
+import re
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QFileDialog
+
+from ..config import CONFIG
 from .res_rc import *
 
 
@@ -67,8 +73,47 @@ class Ui(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("AI Parser", "AI Parser"))
+        Form.setWindowIcon(QtGui.QIcon(":/images/images/icon.png"))
         self.label_2.setText(_translate("Form", "AI Parser"))
         self.Start.setText(_translate("Form", "Start"))
         self.Path.setText(_translate("Form", "Path to file"))
         self.Conf.setText(_translate("Form", "Set config"))
+
+        self.Start.clicked.connect(lambda: self.on_Start_clicked(Form))
+        self.Path.clicked.connect(lambda: self.on_Path_clicked(Form))
+        self.Conf.clicked.connect(lambda: self.on_Conf_clicked(Form))
+
+    def on_Start_clicked(self, Form):
+        ...
+
+    def on_Path_clicked(self, Form):
+        file_path, _ = QFileDialog.getOpenFileName(
+            Form,
+            "Выберите файл",
+            "",
+            "Excel Files (*.xlsx *.xls)"
+        )
+        if not file_path:
+            return
+        CONFIG.app.path_to_file = file_path
+        with open("resources/config.toml", "r", encoding="utf-8") as file:
+            data = file.read()
+            pattern = r'(path_to_file\s*=\s*)([\'"]?)(.*?)\2'
+
+            # Замена с сохранением оригинального формата кавычек
+            updated_data = re.sub(
+                pattern,
+                lambda
+                    m: f"{m.group(1)}{m.group(2) if m.group(2) else ''}{file_path}{m.group(2) if m.group(2) else ''}",
+                data,
+                flags=re.IGNORECASE
+            )
+        with open("resources/config.toml", "w", encoding="utf-8") as file:
+            file.write(updated_data)
+
+
+
+
+    def on_Conf_clicked(self, Form):
+        ...
