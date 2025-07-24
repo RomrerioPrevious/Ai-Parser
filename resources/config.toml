@@ -4,4 +4,4 @@ max_tokens = 50
 path_to_prompt = "resources/prompt.txt"
 
 [app]
-path_to_file = "C:/Users/Asus/Downloads/для тариф.xlsx"
+path_to_file = ""
