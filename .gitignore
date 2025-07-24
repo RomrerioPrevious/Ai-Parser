@@ -5,7 +5,6 @@ HELP.md
 *.swo
 Session.vim
 .cproject
-.idea
 *.iml
 .vscode
 .vscode/
