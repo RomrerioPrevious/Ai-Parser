@@ -16,6 +16,7 @@ Session.vim
 .pytest_cache
 
 ### Project ###
+__pycache__
 **.log
 dist
 build
