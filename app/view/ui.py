@@ -88,14 +88,16 @@ class Ui(object):
         self.Conf.clicked.connect(lambda: self.on_Conf_clicked(Form))
 
     def on_Start_clicked(self, Form):
-        handler = FileHandler()
-        for log in handler.parse():
-            if log[1]:
-                print(1)
-                break
-            else:
-                print(log[0])
-                self.Output.setText(log[0])
+        try:
+            handler = FileHandler()
+            for log in handler.parse():
+                if log[1]:
+                    break
+                else:
+                    print(log[0])
+                    self.Output.setText(log[0])
+        except Exception as e:
+            self.Output.setText(f"Error: {e}")
 
 
     def on_Path_clicked(self, Form):

@@ -84,10 +84,7 @@ class FileHandler:
         return result
 
     def find_price(self, item: Item) -> float:
-        price = self.ai_handler.get_price(item.name)
-        if not price:
-            ...  # TODO create error
-        return price
+        return self.ai_handler.get_price(item.name)
 
     def save_items_to_file(self, items: [Item]) -> bool:
         df = pd.DataFrame([vars(item) for item in items])
