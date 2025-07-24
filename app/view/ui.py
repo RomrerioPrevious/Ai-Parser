@@ -52,10 +52,11 @@ class Ui(object):
         self.Start.setStyleSheet("")
         self.Start.setObjectName("Start")
         self.Output = QtWidgets.QLabel(self.widget)
+        self.Output.setAlignment(QtCore.Qt.AlignTop)
         self.Output.setGeometry(QtCore.QRect(90, 90, 621, 411))
         self.Output.setStyleSheet("background-color: rgba(0, 0, 0, 100);\n"
                                   "border-radius: 10px;\n"
-                                  "font: 75 8pt \"JetBrainsMonoNL Nerd Font\";\n"
+                                  "font: 75 10pt \"JetBrainsMonoNL Nerd Font\";\n"
                                   "color: rgb(255, 255, 255);")
         self.Output.setText("")
         self.Output.setObjectName("Output")
@@ -88,7 +89,14 @@ class Ui(object):
 
     def on_Start_clicked(self, Form):
         handler = FileHandler()
-        handler.start_parse()
+        for log in handler.parse():
+            if log[1]:
+                print(1)
+                break
+            else:
+                print(log[0])
+                self.Output.setText(log[0])
+
 
     def on_Path_clicked(self, Form):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -98,6 +106,7 @@ class Ui(object):
             "Excel Files (*.xlsx *.xls)"
         )
         if not file_path:
+            self.Output.setText(f"Error: the file path has not been entered.")
             return
         CONFIG.app.path_to_file = file_path
         with open("resources/config.toml", "r", encoding="utf-8") as file:
@@ -113,6 +122,7 @@ class Ui(object):
             )
         with open("resources/config.toml", "w", encoding="utf-8") as file:
             file.write(updated_data)
+        self.Output.setText(f"Current path: {file_path}")
 
     def on_Conf_clicked(self, Form):
         project_root = os.getcwd()
