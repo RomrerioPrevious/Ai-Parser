@@ -1,5 +1,4 @@
 import logging
-import time
 from typing import Any, Generator, Tuple
 
 import pandas as pd
@@ -82,9 +81,7 @@ class FileHandler:
         return result
 
     def find_price(self, item: Item) -> float:
-        time.sleep(1)
-        return 1 # TODO
-        # return self.ai_handler.get_price(item.name)
+        return self.ai_handler.get_price(item.name)
 
     def save_items_to_file(self, items: [Item]) -> bool:
         df = pd.DataFrame([vars(item) for item in items])

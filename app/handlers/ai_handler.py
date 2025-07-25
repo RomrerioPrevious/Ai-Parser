@@ -16,12 +16,12 @@ class AiHandler:
 
     def get_price(self, data: str) -> float:
         response = self.ai.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": self.prompt},
                 {"role": "user", "content": f"Find the price of the product: {data}"}
             ],
-            temperature=0.0
+            temperature=0.7
         )
 
         price_str = response.choices[0].message.content
