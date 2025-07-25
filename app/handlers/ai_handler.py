@@ -1,3 +1,6 @@
+import logging
+import re
+
 from ..config import CONFIG
 from openai import OpenAI
 import httpx
@@ -21,11 +24,12 @@ class AiHandler:
                 {"role": "system", "content": self.prompt},
                 {"role": "user", "content": f"Find the price of the product: {data}"}
             ],
-            temperature=0.7
+            temperature=1.5
         )
 
         price_str = response.choices[0].message.content
         try:
-            return float(price_str)
-        except ValueError:
-            raise ValueError(f"Could not convert AI response to float: {price_str}")
+            return float(re.findall(r"\d+\.\d+", price_str)[0])
+        except ValueError as e:
+            logging.error(f"Error parsing price: {e}")
+            return 0
