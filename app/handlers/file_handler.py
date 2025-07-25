@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import Any, Generator, Tuple
 
 import pandas as pd
@@ -43,26 +44,23 @@ class FileHandler:
             self.counter["error"] += 1
             logging.warning(text)
         else:
-            text = f"Product price {item.name} {item.price}"
+            text = f"Product price {item.name} - {item.price}руб"
             self.counter["success"] += 1
             logging.info(text)
         return text
 
 
     def generate_text(self, new_text: str, index: int, max_items: int) -> str:
-        if self.text[21] == "":
-            for i in range(22):
-                if not self.text[i]:
-                    self.text[i] = new_text
-                    break
+        for i in range(1, 22):
+            self.text[i] = self.text[i + 1]
+        if len(new_text) > 75:
+            self.text[21] = "  " + new_text[:72] + "..."
         else:
-            for i in range(21):
-                self.text[i] = self.text[i + 1]
-            self.text[21] = new_text
+            self.text[21] = "  " + new_text
         self.text[22] = "--------------------------" * 3
         success = self.counter["success"]
         error = self.counter["error"]
-        self.text[23] = f"Completed: {success + error} / {str(max_items)}     Success: {success}    Error: {error}"
+        self.text[23] = f"         Completed: {success + error} / {str(max_items)}     Success: {success}     Error: {error}"
         return "\n".join(self.text)
 
     def get_items_from_file(self) -> [Item]:
@@ -84,7 +82,9 @@ class FileHandler:
         return result
 
     def find_price(self, item: Item) -> float:
-        return self.ai_handler.get_price(item.name)
+        time.sleep(1)
+        return 1 # TODO
+        # return self.ai_handler.get_price(item.name)
 
     def save_items_to_file(self, items: [Item]) -> bool:
         df = pd.DataFrame([vars(item) for item in items])

@@ -23,4 +23,9 @@ class AiHandler:
             ],
             temperature=0.0
         )
-        return response
+
+        price_str = response.choices[0].message.content
+        try:
+            return float(price_str)
+        except ValueError:
+            raise ValueError(f"Could not convert AI response to float: {price_str}")
