@@ -18,18 +18,26 @@ class AiHandler:
         
 
     def get_price(self, data: str) -> float:
+        for i in range(5):
+            price_str = self.ask(data)
+            try:
+                price = float(re.findall(r"\d+\.\d+", price_str)[0])
+                if not price:
+                    continue
+                return price
+            except ValueError as e:
+                logging.error(f"Error parsing price: {e}")
+        return 0.0
+
+    def ask(self, data: str) -> str:
         response = self.ai.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": self.prompt},
                 {"role": "user", "content": f"Find the price of the product: {data}"}
             ],
-            temperature=1.5
+            temperature=1.8
         )
 
         price_str = response.choices[0].message.content
-        try:
-            return float(re.findall(r"\d+\.\d+", price_str)[0])
-        except ValueError as e:
-            logging.error(f"Error parsing price: {e}")
-            return 0
+        return price_str

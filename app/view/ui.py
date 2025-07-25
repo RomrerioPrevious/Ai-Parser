@@ -3,6 +3,7 @@ import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtCore import QThread, pyqtSignal
 
 from .. import FileHandler
 from ..config import CONFIG
@@ -88,6 +89,22 @@ class Ui(object):
         self.Conf.clicked.connect(lambda: self.on_Conf_clicked(Form))
 
     def on_Start_clicked(self, Form):
+        class WorkerThread(QThread):
+            log_signal = pyqtSignal(str)
+            error_signal = pyqtSignal(str)
+
+            def run(self):
+                try:
+                    handler = FileHandler()
+                    self.log_signal.emit(handler.generate_text("", 0, 0))
+                    for log in handler.parse():
+                        if log[1]:
+                            break
+                        else:
+                            self.log_signal.emit(log[0])  # Отправляем текст в GUI
+                except Exception as e:
+                    self.error_signal.emit(f"Error: {e}")
+
         self.thread = WorkerThread()
         self.thread.log_signal.connect(self.Output.setText)  # Обновляем текст при получении сигнала
         self.thread.error_signal.connect(self.Output.setText)
@@ -123,20 +140,3 @@ class Ui(object):
     def on_Conf_clicked(self, Form):
         project_root = os.getcwd()
         os.startfile(f"{project_root}/resources/config.toml")
-
-from PyQt5.QtCore import QThread, pyqtSignal
-
-class WorkerThread(QThread):
-    log_signal = pyqtSignal(str)
-    error_signal = pyqtSignal(str)
-
-    def run(self):
-        try:
-            handler = FileHandler()
-            for log in handler.parse():
-                if log[1]:
-                    break
-                else:
-                    self.log_signal.emit(log[0])  # Отправляем текст в GUI
-        except Exception as e:
-            self.error_signal.emit(f"Error: {e}")
