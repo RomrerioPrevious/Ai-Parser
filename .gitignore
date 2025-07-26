@@ -24,3 +24,4 @@ build
 
 ### ANY ###
 resources/config.toml
+.exe
