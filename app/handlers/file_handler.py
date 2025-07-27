@@ -26,6 +26,9 @@ class FileHandler:
     def get_log(self) -> str:
         return "\n".join(self.text)
 
+    def get_log_dict(self) -> [str]:
+        return self.text
+
     def parse(self, widget: QLabel = None) -> Generator[Tuple[str, bool], Any, None]:
         items = self.get_items_from_file()
 
@@ -85,4 +88,4 @@ class FileHandler:
     def save_items_to_file(self, items: [Item]) -> bool:
         df = pd.DataFrame([vars(item) for item in items])
         df.columns = self.columns
-        df.to_excel(f"{self.file} (priced)", index=False, engine="openpyxl")
+        df.to_excel(self.file, index=False, engine="openpyxl")

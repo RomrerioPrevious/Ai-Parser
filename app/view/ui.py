@@ -102,8 +102,14 @@ class Ui(object):
                             break
                         else:
                             self.log_signal.emit(log[0])  # Отправляем текст в GUI
+                    log = handler.get_log_dict()
+                    log[0] = "Success"
+                    for i in range(1, 22):
+                        log[i] = ""
+                    self.log_signal.emit("\n".join(log))
                 except Exception as e:
                     self.error_signal.emit(f"Error: {e}")
+
 
         self.thread = WorkerThread()
         self.thread.log_signal.connect(self.Output.setText)  # Обновляем текст при получении сигнала
