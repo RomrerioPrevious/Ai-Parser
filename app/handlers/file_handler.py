@@ -31,10 +31,9 @@ class FileHandler:
 
         for index, item in enumerate(items):
             item.price = self.find_price(item)
+            self.save_items_to_file(items)
             log = self.log(index, item, items, widget)
             yield self.generate_text(log, index, len(items)), False
-
-        self.save_items_to_file(items)
         yield "Success", True
 
     def log(self, index, item, items, widget) -> str:
@@ -86,4 +85,4 @@ class FileHandler:
     def save_items_to_file(self, items: [Item]) -> bool:
         df = pd.DataFrame([vars(item) for item in items])
         df.columns = self.columns
-        df.to_excel(self.file, index=False, engine="openpyxl")
+        df.to_excel(f"{self.file} (priced)", index=False, engine="openpyxl")
