@@ -1,7 +1,7 @@
 import os
 import re
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QThread, pyqtSignal
 
@@ -96,17 +96,15 @@ class Ui(object):
             def run(self):
                 try:
                     handler = FileHandler()
-                    self.log_signal.emit(handler.generate_text("", 0, 0))
+                    self.log_signal.emit(handler.generate_text(""))
                     for log in handler.parse():
                         if log[1]:
                             break
                         else:
-                            self.log_signal.emit(log[0])  # Отправляем текст в GUI
-                    log = handler.get_log_dict()
-                    log[0] = "Success"
-                    for i in range(1, 22):
-                        log[i] = ""
-                    self.log_signal.emit("\n".join(log))
+                            self.log_signal.emit(log[0])  # Отправляем текст в GUI4
+
+                    log = handler.generate_empty_massage("Success")
+                    self.log_signal.emit(log)
                 except Exception as e:
                     self.error_signal.emit(f"Error: {e}")
 

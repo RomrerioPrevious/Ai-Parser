@@ -1,8 +1,9 @@
 import logging
+import os
 from typing import Any, Generator, Tuple
 
 import pandas as pd
-from PyQt5.QtWidgets import QLabel
+from openai import RateLimitError
 
 from ..config import CONFIG
 from .ai_handler import AiHandler
@@ -13,6 +14,7 @@ class FileHandler:
     def __init__(self, file: str = None, columns: [str] = None):
         self.ai_handler = AiHandler()
         self.columns = columns
+        self.max_items = 0
         self.text = [""] * 24
         self.counter = {
             "success": 0,
@@ -26,20 +28,24 @@ class FileHandler:
     def get_log(self) -> str:
         return "\n".join(self.text)
 
-    def get_log_dict(self) -> [str]:
+    def get_log_dict(self) -> list[str]:
         return self.text
 
-    def parse(self, widget: QLabel = None) -> Generator[Tuple[str, bool], Any, None]:
+    def parse(self) -> Generator[Tuple[str, bool], Any, None]:
         items = self.get_items_from_file()
+        self.max_items = len(items)
 
         for index, item in enumerate(items):
-            item.price = self.find_price(item)
-            self.save_items_to_file(items)
-            log = self.log(index, item, items, widget)
-            yield self.generate_text(log, index, len(items)), False
+            try:
+                item.price = self.find_price(item)
+                self.save_items_to_file(items)
+                log = self.make_log(item)
+                yield self.generate_text(log), False
+            except RateLimitError as e:
+                yield self.generate_empty_massage(e.message), False
         yield "Success", True
 
-    def log(self, index, item, items, widget) -> str:
+    def make_log(self, item: Item) -> str:
         if not item.price:
             text = f"No price found for product {item.name}"
             self.counter["error"] += 1
@@ -51,20 +57,29 @@ class FileHandler:
         return text
 
 
-    def generate_text(self, new_text: str, index: int, max_items: int) -> str:
-        for i in range(1, 22):
-            self.text[i] = self.text[i + 1]
+    def generate_text(self, new_text: str) -> str:
+        for i in range(22, 0, -1):
+            self.text[i] = self.text[i - 1]
         if len(new_text) > 75:
-            self.text[21] = "  " + new_text[:72] + "..."
+            self.text[0] = "  " + new_text[:72] + "..."
         else:
             self.text[21] = "  " + new_text
         self.text[22] = "--------------------------" * 3
         success = self.counter["success"]
         error = self.counter["error"]
-        self.text[23] = f"         Completed: {success + error} / {str(max_items)}     Success: {success}     Error: {error}"
+        self.text[23] = f"         Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
         return "\n".join(self.text)
 
-    def get_items_from_file(self) -> [Item]:
+    def generate_empty_massage(self, new_text: str) -> str:
+        self.text = [""] * 24
+        self.text[0] = "  " + new_text
+        self.text[22] = "--------------------------" * 3
+        success = self.counter["success"]
+        error = self.counter["error"]
+        self.text[23] = f"         Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
+        return "\n".join(self.text)
+
+    def get_items_from_file(self) -> list[Item]:
         data = pd.read_excel(self.file)
         result = []
 
@@ -85,7 +100,9 @@ class FileHandler:
     def find_price(self, item: Item) -> float:
         return self.ai_handler.get_price(item.name)
 
-    def save_items_to_file(self, items: [Item]) -> bool:
+
+    def save_items_to_file(self, items: list[Item]):
         df = pd.DataFrame([vars(item) for item in items])
         df.columns = self.columns
-        df.to_excel(self.file, index=False, engine="openpyxl")
+        base, ext = os.path.splitext(self.file)
+        df.to_excel(f"{base} (price){ext}", index=False, engine="openpyxl")
