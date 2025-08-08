@@ -58,25 +58,25 @@ class FileHandler:
 
 
     def generate_text(self, new_text: str) -> str:
-        for i in range(22, 0, -1):
+        for i in range(23, 2, -1):
             self.text[i] = self.text[i - 1]
         if len(new_text) > 75:
-            self.text[0] = "  " + new_text[:72] + "..."
+            self.text[2] = "  " + new_text[:72] + "..."
         else:
-            self.text[21] = "  " + new_text
-        self.text[22] = "--------------------------" * 3
+            self.text[2] = "  " + new_text
+        self.text[1] = "--------------------------" * 3
         success = self.counter["success"]
         error = self.counter["error"]
-        self.text[23] = f"         Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
+        self.text[0] = f"  Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
         return "\n".join(self.text)
 
     def generate_empty_massage(self, new_text: str) -> str:
         self.text = [""] * 24
-        self.text[0] = "  " + new_text
-        self.text[22] = "--------------------------" * 3
+        self.text[2] = "  " + new_text
+        self.text[1] = "--------------------------" * 3
         success = self.counter["success"]
         error = self.counter["error"]
-        self.text[23] = f"         Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
+        self.text[0] = f"  Completed: {success + error} / {str(self.max_items)}     Success: {success}     Error: {error}"
         return "\n".join(self.text)
 
     def get_items_from_file(self) -> list[Item]:

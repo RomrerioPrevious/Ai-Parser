@@ -1,5 +1,5 @@
 [ai]
-api_key = "sk-5f80349044e94308b6a99bb00f61ff13"
+api_key = ""
 max_tokens = 50
 path_to_prompt = "resources/prompt.txt"
 max_delay = 60.0
@@ -7,4 +7,4 @@ min_delay = 0.1
 
 [app]
 path_to_file = "C:/Users/Asus/Downloads/AiParser-test — копия (price).xlsx"
-proxy = "http://23.237.210.82:80"
+proxy = ""

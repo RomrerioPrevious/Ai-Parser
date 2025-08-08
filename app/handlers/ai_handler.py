@@ -30,7 +30,7 @@ class AiHandler:
             try:
                 price_str = self.ask(data)
                 price = float(re.findall(r"\d+\.\d+", price_str)[0])
-                if price:
+                if not price:
                     continue
                 return price
             except RateLimitError as e:

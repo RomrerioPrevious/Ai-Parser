@@ -96,7 +96,7 @@ class Ui(object):
             def run(self):
                 try:
                     handler = FileHandler()
-                    self.log_signal.emit(handler.generate_text(""))
+                    self.log_signal.emit(handler.generate_text("Program started"))
                     for log in handler.parse():
                         if log[1]:
                             break
